@@ -1,0 +1,112 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "version": "1.0.0",
+    "title": "Priority REST API",
+    "description": "An API that provides access to data in Priority forms",
+    "contact": {
+      "name": "Priority Software",
+      "url": "http://www.priority-software.com"
+    },
+    "license": {
+      "name": "MIT"
+    }
+  },
+  "paths": {
+    "/ORDERS": {
+      "get": {
+        "description": "Returns sales orders in the system",
+          "responses": {
+          "200": {
+            "description": "Sales order in the system",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "items": {
+                    "$ref": "#/components/schemas/ORDERS"
+                  }
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "unexpected error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+},
+  "components": {
+    "schemas": {
+      "ORDERS": {
+        "allOf": [
+          {
+            "properties": {
+              "CUSTNAME": {
+                "type": "string",
+                "description": "The number of the customer who placed the order. If this is a walk-in customer, specify the system number assigned to walk-in customers, and change the name appearing in the Customer Name field."
+              },
+              "CDES": {
+                  "type": "string",
+                  "description": "The full name of the customer in question. In the case of a walk-in customer, change this to the name of the customer placing the order. "
+              },
+              "NAME": {
+                  "type":"string",
+                  "description": "The customer contact for this sales order."
+              },
+              "POSITIONDES": {
+                  "type":"string",
+                  "read-only": true,
+                  "description":"Displays the contact's job title." 
+              },
+              "CURDATE": {
+                  "type": "date",
+                  "description": "The date the order was placed. Once this is specified, an order number is assigned automatically."
+              },
+              "ORDNAME": {
+                "type": "string",
+                "description": "A number which identifies the order. This number is filled in automatically, once a date has been specified, based on the pattern defined in the {DOCPAT.F} form."
+            },
+            "BOOKNUM": {
+                "type": "string" ,
+                "description": "The number of the order that the sales rep recorded outside of the system."
+            },
+            "DOCNO": {
+                "type": "string",
+                "description": "The number of the project for which the order was made."
+            },
+            "PROJDES": {
+                "type": "string",
+                "description": "Displays a brief description of the project for which the order was opened. "
+            }            
+            }
+          }
+        ]
+      },
+      "Error": {
+        "type": "object",
+        "required": [
+          "code",
+          "message"
+        ],
+        "properties": {
+          "code": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "message": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  }
+}
